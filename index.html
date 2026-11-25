@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDTS | Mine Safety Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">M</div>
+            <div>
+                <h1>MineGuard</h1>
+                <p>IoT Mine Safety Monitoring System</p>
+            </div>
+        </div>
+        <div class="connection">
+            <span id="connectionDot" class="dot disconnected"></span>
+            <span id="connectionText">Connecting to Firebase...</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <div>
+                <p class="eyebrow">MINE MONITORING STATION</p>
+                <h2>Mine Roof Safety Dashboard</h2>
+                <p>Monitor the distance between the mine floor and roof in real time.</p>
+            </div>
+            <div class="time-card">
+                <span>LAST SENSOR UPDATE</span>
+                <strong id="lastUpdated">Waiting for data</strong>
+            </div>
+        </section>
+
+        <section id="alertBanner" class="alert-banner status-unknown"
+                 role="alert" aria-live="assertive">
+            <div class="alert-symbol" id="alertSymbol">!</div>
+            <div>
+                <h2 id="statusTitle">WAITING FOR SENSOR DATA</h2>
+                <p id="statusMessage">Safety status will appear when valid sensor data arrives.</p>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <article class="card distance-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">ULTRASONIC SENSOR</p>
+                        <h3>Roof-to-Floor Distance</h3>
+                    </div>
+                    <span class="sensor-tag">LIVE DATA</span>
+                </div>
+
+                <div class="distance-display">
+                    <strong id="distanceValue">--.--</strong>
+                    <span>metres (m)</span>
+                </div>
+
+                <div class="meter">
+                    <div id="meterFill" class="meter-fill unknown"></div>
+                </div>
+                <div class="meter-labels">
+                    <span>0 m</span>
+                    <span>1.70 m</span>
+                    <span>1.80 m</span>
+                    <span>2.00 m+</span>
+                </div>
+
+                <div class="measurement-info">
+                    <span>Sensor</span>
+                    <strong>Ultrasonic</strong>
+                    <span>Controller</span>
+                    <strong>Arduino MKR WiFi</strong>
+                </div>
+            </article>
+
+            <article class="card status-card">
+                <p class="eyebrow">CURRENT CONDITION</p>
+                <div id="statusIcon" class="status-icon unknown">?</div>
+                <h2 id="statusLabel">Awaiting Reading</h2>
+                <p id="statusDescription">No confirmed safety classification is available yet.</p>
+                <div class="status-footer">
+                    <span>Configured safe threshold</span>
+                    <strong>≥ 2.00 m</strong>
+                </div>
+            </article>
+        </section>
+
+        <section class="card threshold-card">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SAFETY LIMITS</p>
+                    <h3>Configured Distance Thresholds</h3>
+                </div>
+            </div>
+
+            <div class="threshold-list">
+                <div class="threshold-item safe-threshold">
+                    <span class="threshold-dot"></span>
+                    <div><strong>Safe threshold met</strong><p>2.00 m and above</p></div>
+                </div>
+                <div class="threshold-item warning-threshold">
+                    <span class="threshold-dot"></span>
+                    <div><strong>Warning</strong><p>1.80 m to below 2.00 m</p></div>
+                </div>
+                <div class="threshold-item unsafe-threshold">
+                    <span class="threshold-dot"></span>
+                    <div><strong>Not Safe</strong><p>1.70 m to below 1.80 m</p></div>
+                </div>
+                <div class="threshold-item danger-threshold">
+                    <span class="threshold-dot"></span>
+                    <div><strong>Danger / Evacuate</strong><p>Below 1.70 m</p></div>
+                </div>
+            </div>
+            <p class="note">
+                These are prototype thresholds, not certified mining safety limits.
+                A qualified mine-safety professional must validate them before any operational use.
+            </p>
+        </section>
+
+        <section class="card system-card">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SYSTEM HEALTH</p>
+                    <h3>Monitoring Information</h3>
+                </div>
+            </div>
+            <div class="system-grid">
+                <div class="system-item">
+                    <span>Firebase connection</span>
+                    <strong id="sensorHealth">Connecting</strong>
+                </div>
+                <div class="system-item">
+                    <span>Reading freshness</span>
+                    <strong id="readingAge">None</strong>
+                </div>
+                <div class="system-item">
+                    <span>Reported LED state</span>
+                    <strong id="ledState">Not reported</strong>
+                </div>
+                <div class="system-item">
+                    <span>Reported buzzer state</span>
+                    <strong id="buzzerState">Not reported</strong>
+                </div>
+            </div>
+            <p class="note">
+                This dashboard displays sensor readings and reported hardware states.
+                It does not activate a physical LED or buzzer. Local alarms must work independently of the browser and internet.
+            </p>
+        </section>
+
+        <footer>
+            <p>MineGuard · IoT Mine Safety Monitoring</p>
+            <p>Arduino MKR WiFi + Ultrasonic Sensor + Firebase Realtime Database</p>
+        </footer>
+    </main>
+
+    <!-- Firebase connection and dashboard logic -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
