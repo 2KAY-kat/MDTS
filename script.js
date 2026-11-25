@@ -1,31 +1,22 @@
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue } from "firebase/database";
 
-import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-
-import {
-  getDatabase,
-  ref,
-  onValue
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-
-// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDQHbO_KqUEnGV-av70CE8UjdkGUYcyncI",
-  authDomain: "mdts-5f13c.firebaseapp.com",
-  databaseURL: "https://mdts-5f13c-default-rtdb.firebaseio.com",
-  projectId: "mdts-5f13c",
-  storageBucket: "mdts-5f13c.firebasestorage.app",
-  messagingSenderId: "234783726641",
-  appId: "1:234783726641:web:ab15202ebb5506face0910",
-  measurementId: "G-521P67CP3D"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_DATABASE_URL,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const db = getDatabase(app);
 
-// Your actual Firebase database path
-const roofRef = ref(database, "roofMonitor");
+// Fixed: uses 'db' instead of undefined 'database'
+const roofRef = ref(db, "roofMonitor");
 
 const $ = id => document.getElementById(id);
 
@@ -95,7 +86,6 @@ function showUnavailable(message) {
 }
 
 function displayReading(data) {
-  // Read your actual Firebase field names.
   const distance = Number(data.distance_m);
   const valid = data.valid === true;
 
@@ -165,7 +155,7 @@ function displayReading(data) {
   // Distance meter (visual scale from 0 to 3 m)
   const percentage = Math.max(
     0,
-    Math.min(100, distance / 3 * 100)
+    Math.min(100, (distance / 3) * 100)
   );
 
   $("meterFill").style.width = percentage + "%";
@@ -214,8 +204,7 @@ onValue(
   }
 );
 
-// Detect missing updates.
-// Assumes the Arduino should update Firebase at least once every 10 seconds.
+// Detect missing updates
 setInterval(() => {
   if (
     lastUpdate === null ||
